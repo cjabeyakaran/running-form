@@ -12,5 +12,6 @@ function readVideo(event) {
         }, this);
 
         reader.readAsDataURL(event.target.files[0]);
+        calculatePose();
     }
 }
