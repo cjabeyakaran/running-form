@@ -10,15 +10,21 @@
 </head>
 
 <body>
-    <div class="upload">
+    <!-- <div class="upload">
         <input type="file" id="vid-upload" accept="video/*" crossorigin='anonymous'>
+    </div> -->
+    <div class="upload">
+        <input type="file" id="img-upload" accept="image/*" crossorigin='anonymous' onchange="loadImage(this);">
     </div>
     <div class="container">
-        <div class="video">
+        <!-- <div class="video">
             <video controls id="video-tag">
                 <source id="video-source">
                 Your browser does not support the video tag.
             </video>
+        </div> -->
+        <div class="still">
+            <img id="img-tag">
         </div>
         <div class="analysis">
         </div>
@@ -27,10 +33,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <!-- Load TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <!-- Load Posenet -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
-    <script src="js/video.js"></script>
+    <script src="js/loader.js"></script>
     <script src="js/model.js"></script>
 </body>
 

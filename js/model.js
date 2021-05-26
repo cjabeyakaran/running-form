@@ -1,11 +1,22 @@
-function calculatePose() {
-    let video = $("#video-tag")[0];
-    posenet.load({width: 360, height: 640}).then((net) => {
-        console.log(video);
-        const pose = net.estimateSinglePose(video);
+const net = poseNet.load({
+    architecture: 'MobileNetV1',
+    outputStride: 16,
+    inputResolution: {width: 208, height: 308},
+    multiplier: 0.75
+});
+
+function calculatePose(image) {
+    // let poses = net.estimateSinglePost(image, {
+    //     flipHorizontal: true
+    // });
+
+    posenet.load().then(function(net) {
+        const pose = net.estimateSinglePose(image, {
+          flipHorizontal: true
+        });
         return pose;
-    }).then((pose) => {
+      }).then(function(pose){
         console.log(pose);
-    });
+      });
 }
 
