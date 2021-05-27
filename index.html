@@ -13,9 +13,6 @@
     <!-- <div class="upload">
         <input type="file" id="vid-upload" accept="video/*" crossorigin='anonymous'>
     </div> -->
-    <div class="upload">
-        <input type="file" id="img-upload" accept="image/*" crossorigin='anonymous' onchange="loadImage(this);">
-    </div>
     <div class="container">
         <!-- <div class="video">
             <video controls id="video-tag">
@@ -25,9 +22,13 @@
         </div> -->
         <div class="still">
             <img id="img-tag">
+            <canvas id="skel" width="640px" height="640px"></canvas>
         </div>
         <div class="analysis">
         </div>
+    </div>
+    <div class="upload">
+        <input type="file" id="img-upload" accept="image/*" crossorigin='anonymous' onchange="loadImage(this);">
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

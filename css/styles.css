@@ -1,4 +1,17 @@
 img {
-    width: 208px; 
-    height: 308px;
+    width: 640px; 
+    height: 640px;
+    position: absolute;
+    left: 0;
+    top: 30px;
+    z-index: 1;
+}
+
+canvas {
+    /* width: 640px; 
+    height: 640px; */
+    position: absolute;
+    left: 0;
+    top: 30px;
+    z-index: 2;
 }
