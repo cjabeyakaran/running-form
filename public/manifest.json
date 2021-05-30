@@ -1,0 +1,8 @@
+{
+  "short_name": "Running Form",
+  "name": "Running Form Analyzer",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
