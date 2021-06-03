@@ -1,5 +1,5 @@
 import React from 'react';
-import FrameCard from './FrameCard';
+import PoseCard from './PoseCard';
 import '../css/App.css'
 
 class App extends React.Component {
@@ -34,7 +34,7 @@ class App extends React.Component {
 	render() {
 		let cards = [];
 		this.state.srcs.forEach((src, index) => {
-			cards.push(<FrameCard src={src} id={index}/>);
+			cards.push(<PoseCard src={src} id={index}/>);
 		});
 
 		return (
