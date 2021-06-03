@@ -1,4 +1,4 @@
-modelSpec = {
+const modelSpec = {
     architecture: 'ResNet50',
     outputStride: 32,
     inputResolution: {width: 640, height: 640},
@@ -10,12 +10,12 @@ function calculatePose(image) {
         return net.estimateMultiplePoses(image);
     }).then(function(poses){
         console.log(poses);
-        drawLegs(poses[0]);
+        return poses;
     });
 }
 
-function drawLegs(pose) {
-    let ctx = $("#skel")[0].getContext("2d");
+function drawLegs(pose, id) {
+    let ctx = document.getElementById(id).getContext("2d");
     let points = pose.keypoints;
     ctx.strokeStyle = "#FF0000";
     ctx.beginPath();
@@ -30,6 +30,4 @@ function drawLegs(pose) {
     ctx.lineTo(points[16].position.x, points[16].position.y);
     ctx.stroke();
 }
-
-
 
