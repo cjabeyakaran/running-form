@@ -6,7 +6,7 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			srcs: new Set()
+			srcs: []
 		};
 	}
 
@@ -26,7 +26,9 @@ class App extends React.Component {
 	addSrc = (src) => {
 		this.setState((state) => {
 			let currSet = state.srcs;
-			currSet.add(src);
+			if (!currSet.includes(src)) {
+				currSet.push(src);
+			}
 			return {srcs: currSet};
 		});
 	}
@@ -34,7 +36,7 @@ class App extends React.Component {
 	render() {
 		let cards = [];
 		this.state.srcs.forEach((src, index) => {
-			cards.push(<PoseCard src={src} id={index}/>);
+			cards.push(<PoseCard key={index} src={src} id={index}/>);
 		});
 
 		return (
