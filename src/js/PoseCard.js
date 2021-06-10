@@ -3,24 +3,13 @@ import * as posenet from '@tensorflow-models/posenet';
 import '../css/PoseCard.css'
 
 class PoseCard extends React.PureComponent {
-    render() {
-        return (
-            <div className="card">
-                {<Pose src={this.props.src} id={this.props.id}/>}
-            </div>
-        );
-    }
-}
-
-class Pose extends React.PureComponent {
-    static defaultProps = {
-        modelSpec: {
-            architecture: 'ResNet50',
-            outputStride: 32,
-            inputResolution: {width: 200, height: 200},
-            quantBytes: 4
-        }
-    };
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         joints: {},
+    //         pointers: []
+    //     }
+    // }
 
     renderOverlay() {
         let imgId = "still-" + this.props.id;
@@ -30,7 +19,14 @@ class Pose extends React.PureComponent {
     }
 
     async calculatePose(imgId, canvasId) {
-        const net = await posenet.load(this.props.modelSpec);
+        const modelSpec = {
+            architecture: 'ResNet50',
+            outputStride: 32,
+            inputResolution: {width: 400, height: 400},
+            quantBytes: 4
+        }
+
+        const net = await posenet.load(modelSpec);
         let image = document.getElementById(imgId);
         const poses = await net.estimateMultiplePoses(image);
         console.log(poses);
@@ -60,17 +56,22 @@ class Pose extends React.PureComponent {
     }
 
     render() {
+        // analysis = []
+        // this.state.pointers.forEach((pointer) => {
+        //     analysis.push(<p> {pointer} </p>)
+        // })
         return (
-            <div className="frame">
-                {<img src={this.props.src} id={"still-" + this.props.id} className="still" height="200px" width="200px"/>}
-                {<canvas id={"skel-" + this.props.id} className="skel" height="200px" width="200px"> </canvas>}
+            <div className="card">
+                <div className="frame">
+                    {<img src={this.props.src} id={"still-" + this.props.id} className="still" height="400px" width="400px"/>}
+                    {<canvas id={"skel-" + this.props.id} className="skel" height="400px" width="400px"> </canvas>}
+                </div>
+                <div id={"analysis-" + this.props.id} className="analysis">
+                    {/* {analysis} */}
+                </div>
             </div>
         );
     }
 }
-
-// function Analysis() {
-
-// }
 
 export default PoseCard;
