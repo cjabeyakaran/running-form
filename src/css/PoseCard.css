@@ -2,6 +2,15 @@
     display: flex;
 }
 
+.card {
+    width: 400px;
+}
+
+.card-image {
+    height: 400px;
+    width: 400px;
+}
+
 .still {
     position: relative;
     left: 0;

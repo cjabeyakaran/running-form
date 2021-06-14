@@ -44,7 +44,7 @@ class App extends React.Component {
 				<div className="upload">
 					<input type="file" id="img-upload" accept="image/*" crossOrigin='anonymous' onChange={this.loadImage} /> 
 				</div>
-				<div id="card-container">
+				<div className="container" id="card-container">
 					{cards}
 				</div>
 			</>

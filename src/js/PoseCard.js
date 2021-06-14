@@ -3,22 +3,14 @@ import * as posenet from '@tensorflow-models/posenet';
 import '../css/PoseCard.css'
 
 class PoseCard extends React.PureComponent {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         joints: {},
-    //         pointers: []
-    //     }
-    // }
-
-    renderOverlay() {
-        let imgId = "still-" + this.props.id;
-        let canvasId = "skel-" + this.props.id;
-
-        this.calculatePose(imgId, canvasId);
+    constructor(props) {
+        super(props);
+        this.state = {
+            keypoints: []
+        }
     }
 
-    async calculatePose(imgId, canvasId) {
+    async calculatePose(imgId) {
         const modelSpec = {
             architecture: 'ResNet50',
             outputStride: 32,
@@ -31,12 +23,12 @@ class PoseCard extends React.PureComponent {
         const poses = await net.estimateMultiplePoses(image);
         console.log(poses);
 
-        this.drawLegs(poses[0], canvasId);
+        this.setState({keypoints: poses[0].keypoints});
     }
 
-    drawLegs(pose, id) {
+    drawLegs(id) {
         let ctx = document.getElementById(id).getContext("2d");
-        let points = pose.keypoints;
+        let points = this.state.keypoints;
         ctx.strokeStyle = "#FF0000";
         ctx.beginPath();
         ctx.moveTo(points[11].position.x, points[11].position.y);
@@ -52,22 +44,23 @@ class PoseCard extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.renderOverlay();
+        let imgId = "still-" + this.props.id;
+        let canvasId = "skel-" + this.props.id;
+
+        this.calculatePose(imgId).then(
+            () => {this.drawLegs(canvasId)}
+        );
     }
 
     render() {
-        // analysis = []
-        // this.state.pointers.forEach((pointer) => {
-        //     analysis.push(<p> {pointer} </p>)
-        // })
         return (
             <div className="card">
-                <div className="frame">
+                <div className="card-image">
                     {<img src={this.props.src} id={"still-" + this.props.id} className="still" height="400px" width="400px"/>}
                     {<canvas id={"skel-" + this.props.id} className="skel" height="400px" width="400px"> </canvas>}
                 </div>
-                <div id={"analysis-" + this.props.id} className="analysis">
-                    {/* {analysis} */}
+                <div className="card-content">
+                    <p>Hello</p>
                 </div>
             </div>
         );
