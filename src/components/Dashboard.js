@@ -1,14 +1,27 @@
 import React from 'react';
+import { Button } from '@material-ui/core';
 import PoseCard from './PoseCard';
-import '../css/App.css'
+import { useAuth } from '../contexts/AuthContext'
+import '../css/Dashboard.css'
 
-class App extends React.Component {
+class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			srcs: []
 		};
 	}
+
+	// handlelogout = () => {
+	// 	const { logout } = useAuth();
+		
+	// 	try {
+	// 		logout();
+	// 		history.push("/login");
+	// 	} catch {
+
+	// 	}
+	// }
 
 	loadImage = (e) => {
 		e.preventDefault();
@@ -41,6 +54,9 @@ class App extends React.Component {
 
 		return (
 			<>
+				{/* <div className="logout">
+					<Button onClick={this.handlelogout}> Log Out </Button>
+				</div> */}
 				<div className="upload">
 					<input type="file" id="img-upload" accept="image/*" crossOrigin='anonymous' onChange={this.loadImage} /> 
 				</div>
@@ -52,4 +68,4 @@ class App extends React.Component {
 	}
 }
 
-export default App;
+export default Dashboard;
