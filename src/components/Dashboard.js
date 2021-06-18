@@ -1,71 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
-import PoseCard from './PoseCard';
-import { useAuth } from '../contexts/AuthContext'
-import '../css/Dashboard.css'
+import { useHistory } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import '../css/Dashboard.css';
+import CardCollection from './CardCollection';
 
-class Dashboard extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			srcs: []
-		};
-	}
+function Dashboard(props) {
+	const [error, setError] = useState("");
+	const { currentUser, logout } = useAuth();
+	const history = useHistory();
 
-	// handlelogout = () => {
-	// 	const { logout } = useAuth();
-		
-	// 	try {
-	// 		logout();
-	// 		history.push("/login");
-	// 	} catch {
-
-	// 	}
-	// }
-
-	loadImage = (e) => {
-		e.preventDefault();
-		let file = e.target.files[0];
-
-		if (e.target.files[0]) {
-			let reader = new FileReader();
-			reader.onload = (e) => {
-				this.addSrc(reader.result);
-			};
-			reader.readAsDataURL(file);
+	const handlelogout = () => {
+		try {
+			logout();
+			history.push("/login");
+		} catch {
+			setError("Failed to log out");
 		}
-	}
+	};
 
-	addSrc = (src) => {
-		this.setState((state) => {
-			let currSet = state.srcs;
-			if (!currSet.includes(src)) {
-				currSet.push(src);
-			}
-			return {srcs: currSet};
-		});
-	}
-
-	render() {
-		let cards = [];
-		this.state.srcs.forEach((src, index) => {
-			cards.push(<PoseCard key={index} src={src} id={index}/>);
-		});
-
-		return (
-			<>
-				{/* <div className="logout">
-					<Button onClick={this.handlelogout}> Log Out </Button>
-				</div> */}
-				<div className="upload">
-					<input type="file" id="img-upload" accept="image/*" crossOrigin='anonymous' onChange={this.loadImage} /> 
-				</div>
-				<div className="container" id="card-container">
-					{cards}
-				</div>
-			</>
-		);
-	}
+	return (
+		<>
+			<div className="logout">
+				<Button onClick={handlelogout}> Log Out </Button>
+			</div>
+			<CardCollection user={currentUser.uid}/>
+		</>
+	);
 }
 
 export default Dashboard;
