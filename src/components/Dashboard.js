@@ -11,6 +11,8 @@ function Dashboard(props) {
 	const { currentUser, logout } = useAuth();
 	const history = useHistory();
 
+	console.log(currentUser);
+
 	const handlelogout = () => {
 		try {
 			logout();
