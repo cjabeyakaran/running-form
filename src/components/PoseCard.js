@@ -81,13 +81,19 @@ class PoseCard extends React.PureComponent {
     }
         
     componentDidMount() {
-        if (this.props.upload) {
-            let imgId = "still-" + this.props.id;
-            let canvasId = "skel-" + this.props.id;
+        const imgId = "still-" + this.props.id;
+        const canvasId = "skel-" + this.props.id;
 
+        if (this.props.upload) {
+            console.log(this.props);
             this.calculatePose(imgId)
             .then(() => this.addImageToFirestore())
             .then(() => this.drawLegs(canvasId));
+        } else {
+            this.setState({
+                keypoints: this.props.keypoints, 
+                analysis: this.props.analysis
+            }, () => this.drawLegs(canvasId));
         }
     }
 
@@ -95,19 +101,10 @@ class PoseCard extends React.PureComponent {
         const { classes } = this.props;
 
         return (
-            // <div className="card">
-            //     <div className="card-image">
-            //         {<img src={this.props.src} id={"still-" + this.props.id} className="still" height="400px" width="400px"/>}
-            //         {<canvas id={"skel-" + this.props.id} className="skel" height="400px" width="400px"> </canvas>}
-            //     </div>
-            //     <div className="card-content">
-            //         <p>Analysis</p>
-            //     </div>
-            // </div>
             <Card className={classes.root}> 
                 <CardMedia>
-                {<img src={this.props.src} id={"still-" + this.props.id} className="still" height="400px" width="400px"/>}
-                {<canvas id={"skel-" + this.props.id} className="skel" height="400px" width="400px"> </canvas>}
+                    {<img src={this.props.src} alt="" id={"still-" + this.props.id} className="still" height="400px" width="400px" />}
+                    {<canvas id={"skel-" + this.props.id} className="skel" height="400px" width="400px"> </canvas>}
                 </CardMedia>
                 <CardContent>
                     <Typography>

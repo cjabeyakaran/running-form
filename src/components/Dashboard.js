@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../css/Dashboard.css';
@@ -22,6 +23,7 @@ function Dashboard(props) {
 	return (
 		<>
 			<div className="logout">
+				{error && <Alert severity="error"> {error} </Alert>}
 				<Button onClick={handlelogout}> Log Out </Button>
 			</div>
 			<CardCollection user={currentUser.uid}/>

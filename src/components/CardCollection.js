@@ -13,7 +13,7 @@ import { db } from '../firebase';
 import PoseCard from './PoseCard'
 
 function CardCollection(props) {
-    const [data, setData] = useState([]);
+    const [cards, setCards] = useState([]);
     const [newImgs, setNewImgs] = useState([]);
     const [src, setSrc] = useState("");
     const [stage, setStage] = useState("");
@@ -41,35 +41,45 @@ function CardCollection(props) {
 
 	const handleSubmit = (e) => {
         e.preventDefault();
-        if ((stage == "") || (src == "")) {
+        if ((stage === "") || (src === "")) {
             setError("Must upload picture and select type of frame");
         }
 
         setNewImgs([...newImgs, {src: src, stage: stage}]);
     };
 
-    const getDataFromFirestore = async () => {
-        await db.collection(props.user)
+    const getDataFromFirestore = () => {
+        db.collection(props.user)
         .get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                setData([...data, doc.data()])
+                setCards([...cards, <PoseCard 
+                    key={doc.id} 
+                    id={doc.id} 
+                    src={doc.data().src} 
+                    upload={false} 
+                    keypoints={doc.data().keypoints} 
+                    analysis={doc.data().analysis} 
+                />]);
             });
         });
-
     };
 
-    if (data.length === 0) {
+    if (cards.length === 0) {
         getDataFromFirestore();
     }
 
-    let cards = [];
     newImgs.forEach((img) => {
         const id = Math.random().toString(36).substr(2, 9);
-        cards.push(<PoseCard key={id} id={id} src={img.src} stage={img.stage} upload={true} user={props.user} />)
+        setCards([...cards, <PoseCard 
+            key={id} 
+            id={id} 
+            src={img.src} 
+            stage={img.stage} 
+            upload={true} 
+            user={props.user} 
+        />]);
     });
-
-    
 
     return(
         <>
