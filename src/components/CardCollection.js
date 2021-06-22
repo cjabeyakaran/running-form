@@ -14,7 +14,6 @@ import PoseCard from './PoseCard'
 
 function CardCollection(props) {
     const [cards, setCards] = useState([]);
-    const [newImgs, setNewImgs] = useState([]);
     const [src, setSrc] = useState("");
     const [stage, setStage] = useState("");
     const [error, setError] = useState("");
@@ -44,8 +43,15 @@ function CardCollection(props) {
         if ((stage === "") || (src === "")) {
             setError("Must upload picture and select type of frame");
         }
-
-        setNewImgs([...newImgs, {src: src, stage: stage}]);
+        const id = Math.random().toString(36).substr(2, 9);
+        setCards([...cards, <PoseCard 
+            key={id} 
+            id={id} 
+            src={src} 
+            stage={stage} 
+            upload={true} 
+            user={props.user} 
+        />]);
     };
 
     const getDataFromFirestore = () => {
@@ -68,18 +74,6 @@ function CardCollection(props) {
     if (cards.length === 0) {
         getDataFromFirestore();
     }
-
-    newImgs.forEach((img) => {
-        const id = Math.random().toString(36).substr(2, 9);
-        setCards([...cards, <PoseCard 
-            key={id} 
-            id={id} 
-            src={img.src} 
-            stage={img.stage} 
-            upload={true} 
-            user={props.user} 
-        />]);
-    });
 
     return(
         <>
