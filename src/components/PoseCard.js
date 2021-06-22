@@ -15,7 +15,8 @@ const styles = {
         maxWidth: 400
     },
     media: {
-        height: 400
+        height: 400,
+        position: "relative"
     }
 };
 
@@ -102,7 +103,7 @@ class PoseCard extends React.PureComponent {
 
         return (
             <Card className={classes.root}> 
-                <CardMedia>
+                <CardMedia className={classes.media}>
                     {<img src={this.props.src} alt="" id={"still-" + this.props.id} className="still" height="400px" width="400px" />}
                     {<canvas id={"skel-" + this.props.id} className="skel" height="400px" width="400px"> </canvas>}
                 </CardMedia>

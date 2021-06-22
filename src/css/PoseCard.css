@@ -1,18 +1,5 @@
-#card-container {
-    display: flex;
-}
-
-.card {
-    width: 400px;
-}
-
-.card-image {
-    height: 400px;
-    width: 400px;
-}
-
 .still {
-    position: relative;
+    position: absolute;
     left: 0;
     top: 0;
     z-index: 1;
