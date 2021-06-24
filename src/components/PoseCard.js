@@ -8,6 +8,7 @@ import {
     withStyles
 } from '@material-ui/core';
 import { db } from '../firebase';
+import { analysisComponent } from '../AnalysisContent';
 import '../css/PoseCard.css'
 
 const styles = {
@@ -25,7 +26,7 @@ class PoseCard extends React.PureComponent {
         super(props);
         this.state = {
             keypoints: [],
-            analysis: []
+            analysis: ""
         }
     }
 
@@ -60,25 +61,84 @@ class PoseCard extends React.PureComponent {
         .catch((error) => console.error("Error writing document: ", error));
     }
 
-    calculateAnalysis() {
-        this.setState({analysis: "All good!"})
+    calculateVectorAngle(w, v) {
+        let dot = (w.dx * v.dx) + (w.dy * v.dy);
+        let wNorm = Math.sqrt(Math.pow(w.dx, 2) + Math.pow(w.dy, 2));
+        let vNorm = Math.sqrt(Math.pow(v.dx, 2) + Math.pow(v.dy, 2));
+        return Math.acos(dot/(wNorm * vNorm));
     }
 
-    drawLegs(id) {
+    analyzeIFF(id) {
+        let leftAnkle = this.state.keypoints[15].position;
+        let rightAnkle = this.state.keypoints[16].position;
+        let ankle, knee;
+
+        // check which foot is landing
+        if (leftAnkle.y > rightAnkle.y) {
+            ankle = leftAnkle;
+            knee = this.state.keypoints[13].position;
+        } else {
+            ankle = rightAnkle;
+            knee = this.state.keypoints[14].position;
+        }
+    
+        let shoulder, hip;
+        // check where runner is facing
+        if (this.state.keypoints[3].score > this.state.keypoints[4].score) {
+            // left side towards us
+            shoulder = this.state.keypoints[5].position;
+            hip = this.state.keypoints[11].position;
+        } else {
+            // right side towards us
+            shoulder = this.state.keypoints[6].position;
+            hip = this.state.keypoints[12].position;
+        }
+
+        let legVector = {dx: knee.x - ankle.x, dy: knee.y - ankle.y};
+        let torsoVector = {dx: shoulder.x - hip.x, dy: shoulder.y - hip.y};
+        
+        let angleLegTorso = this.calculateVectorAngle(legVector, torsoVector);
+        let angleLegGround = this.calculateVectorAngle(legVector, {dx: 1, dy: 0});
+
+        // if legs and torso vectors aren't close to parallel
+        // or if leg lands close to vertical 
+        // most likely to be overstriding
+        let ifOverstriding = (angleLegTorso > 0.18) || (angleLegGround > 1.5);
+        if (! ifOverstriding) {
+            this.setState({analysis: "noissue"});
+        } else {
+            this.setState({analysis: "overstriding"});
+        }
+
+        // draw leg and torso vectors
         let ctx = document.getElementById(id).getContext("2d");
-        let points = this.state.keypoints;
-        ctx.strokeStyle = "#FF0000";
+        ctx.strokeStyle = ifOverstriding ? "#FF0000" : "#00FF00";
         ctx.beginPath();
-        ctx.moveTo(points[11].position.x, points[11].position.y);
-        ctx.lineTo(points[13].position.x, points[13].position.y);
-        ctx.lineTo(points[15].position.x, points[15].position.y);
+        ctx.moveTo(shoulder.x, shoulder.y);
+        ctx.lineTo(hip.x, hip.y);
         ctx.stroke();
 
-        ctx.beginPath();
-        ctx.moveTo(points[12].position.x, points[12].position.y);
-        ctx.lineTo(points[14].position.x, points[14].position.y);
-        ctx.lineTo(points[16].position.x, points[16].position.y);
+        ctx.moveTo(knee.x, knee.y);
+        ctx.lineTo(ankle.x, ankle.y);
         ctx.stroke();
+    }
+
+    analyzeMid(id) {
+
+    }
+
+    analyzePushOff(id) {
+
+    }
+
+    calculateAnalysis(id) {
+        if (this.props.stage === "iff") {
+            this.analyzeIFF(id);
+        } else if (this.props.stage === "mid") {
+            this.analyzeMid(id);
+        } else if (this.props.stage === "push") {
+            this.analyzePushOff(id);
+        }
     }
         
     componentDidMount() {
@@ -86,15 +146,14 @@ class PoseCard extends React.PureComponent {
         const canvasId = "skel-" + this.props.id;
 
         if (this.props.upload) {
-            console.log(this.props);
             this.calculatePose(imgId)
-            .then(() => this.addImageToFirestore())
-            .then(() => this.drawLegs(canvasId));
+            .then(() => this.calculateAnalysis(canvasId))
+            .then(() => this.addImageToFirestore());
         } else {
             this.setState({
                 keypoints: this.props.keypoints, 
                 analysis: this.props.analysis
-            }, () => this.drawLegs(canvasId));
+            }, () => console.log("Loaded from firestore")); // call appropriate draw function for the specific stance
         }
     }
 
@@ -109,7 +168,7 @@ class PoseCard extends React.PureComponent {
                 </CardMedia>
                 <CardContent>
                     <Typography>
-                        Analysis
+                        {analysisComponent(this.state.analysis)}
                     </Typography>
                 </CardContent>
             </Card>
