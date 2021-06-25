@@ -3,12 +3,10 @@ import * as posenet from '@tensorflow-models/posenet';
 import {
     Card,
     CardMedia,
-    CardContent,
-    Typography,
     withStyles
 } from '@material-ui/core';
 import { db } from '../firebase';
-import { analysisComponent } from '../AnalysisContent';
+import { analysisComponent } from './AnalysisContent';
 import '../css/PoseCard.css'
 
 const styles = {
@@ -43,7 +41,8 @@ class PoseCard extends React.PureComponent {
         const poses = await net.estimateMultiplePoses(image);
         console.log(poses);
 
-        this.setState({keypoints: poses[0].keypoints});
+        // this.setState({keypoints: poses[0].keypoints});
+        return poses[0];
     }
 
     async addImageToFirestore() {
@@ -68,31 +67,33 @@ class PoseCard extends React.PureComponent {
         return Math.acos(dot/(wNorm * vNorm));
     }
 
-    analyzeIFF(id) {
-        let leftAnkle = this.state.keypoints[15].position;
-        let rightAnkle = this.state.keypoints[16].position;
+    analyzeIFF(keypoints) {
+        let leftAnkle = keypoints[15].position;
+        let rightAnkle = keypoints[16].position;
         let ankle, knee;
 
         // check which foot is landing
         if (leftAnkle.y > rightAnkle.y) {
             ankle = leftAnkle;
-            knee = this.state.keypoints[13].position;
+            knee = keypoints[13].position;
         } else {
             ankle = rightAnkle;
-            knee = this.state.keypoints[14].position;
+            knee = keypoints[14].position;
         }
     
         let shoulder, hip;
         // check where runner is facing
-        if (this.state.keypoints[3].score > this.state.keypoints[4].score) {
+        if (keypoints[3].score > keypoints[4].score) {
             // left side towards us
-            shoulder = this.state.keypoints[5].position;
-            hip = this.state.keypoints[11].position;
+            shoulder = keypoints[5].position;
+            hip = keypoints[11].position;
         } else {
             // right side towards us
-            shoulder = this.state.keypoints[6].position;
-            hip = this.state.keypoints[12].position;
+            shoulder = keypoints[6].position;
+            hip = keypoints[12].position;
         }
+
+        this.setState({keypoints: {shoulder: shoulder, hip: hip, knee: knee, ankle: ankle}});
 
         let legVector = {dx: knee.x - ankle.x, dy: knee.y - ankle.y};
         let torsoVector = {dx: shoulder.x - hip.x, dy: shoulder.y - hip.y};
@@ -109,17 +110,19 @@ class PoseCard extends React.PureComponent {
         } else {
             this.setState({analysis: "overstriding"});
         }
+    }
 
+    drawIff(id) {
         // draw leg and torso vectors
         let ctx = document.getElementById(id).getContext("2d");
-        ctx.strokeStyle = ifOverstriding ? "#FF0000" : "#00FF00";
+        ctx.strokeStyle = (this.state.analysis === "noissue") ? "#00FF00" : "#FF0000";
         ctx.beginPath();
-        ctx.moveTo(shoulder.x, shoulder.y);
-        ctx.lineTo(hip.x, hip.y);
+        ctx.moveTo(this.state.keypoints.shoulder.x, this.state.keypoints.shoulder.y);
+        ctx.lineTo(this.state.keypoints.hip.x, this.state.keypoints.hip.y);
         ctx.stroke();
 
-        ctx.moveTo(knee.x, knee.y);
-        ctx.lineTo(ankle.x, ankle.y);
+        ctx.moveTo(this.state.keypoints.knee.x, this.state.keypoints.knee.y);
+        ctx.lineTo(this.state.keypoints.ankle.x, this.state.keypoints.ankle.y);
         ctx.stroke();
     }
 
@@ -131,14 +134,25 @@ class PoseCard extends React.PureComponent {
 
     }
 
-    calculateAnalysis(id) {
+    calculateAnalysis(pose) {
+        let keypoints = pose.keypoints;
         if (this.props.stage === "iff") {
-            this.analyzeIFF(id);
-        } else if (this.props.stage === "mid") {
-            this.analyzeMid(id);
-        } else if (this.props.stage === "push") {
-            this.analyzePushOff(id);
-        }
+            this.analyzeIFF(keypoints);
+        } // else if (this.props.stage === "mid") {
+        //     this.analyzeMid(id);
+        // } else if (this.props.stage === "push") {
+        //     this.analyzePushOff(id);
+        // }
+    }
+
+    draw(id) {
+        if (this.props.stage === "iff") {
+            this.drawIff(id);
+        } // else if (this.props.stage === "mid") {
+        //     this.analyzeMid(id);
+        // } else if (this.props.stage === "push") {
+        //     this.analyzePushOff(id);
+        // }
     }
         
     componentDidMount() {
@@ -147,13 +161,17 @@ class PoseCard extends React.PureComponent {
 
         if (this.props.upload) {
             this.calculatePose(imgId)
-            .then(() => this.calculateAnalysis(canvasId))
+            .then((pose) => this.calculateAnalysis(pose))
+            .then(() => this.draw(canvasId))
             .then(() => this.addImageToFirestore());
         } else {
             this.setState({
                 keypoints: this.props.keypoints, 
                 analysis: this.props.analysis
-            }, () => console.log("Loaded from firestore")); // call appropriate draw function for the specific stance
+            }, () => {
+                console.log("Loaded from firestore");
+                this.draw(canvasId);
+            }); // call appropriate draw function for the specific stance
         }
     }
 
@@ -166,11 +184,7 @@ class PoseCard extends React.PureComponent {
                     {<img src={this.props.src} alt="" id={"still-" + this.props.id} className="still" height="400px" width="400px" />}
                     {<canvas id={"skel-" + this.props.id} className="skel" height="400px" width="400px"> </canvas>}
                 </CardMedia>
-                <CardContent>
-                    <Typography>
-                        {analysisComponent(this.state.analysis)}
-                    </Typography>
-                </CardContent>
+                {/* {analysisComponent(this.state.analysis)} */}
             </Card>
         );
     }
