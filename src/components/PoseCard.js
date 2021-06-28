@@ -206,11 +206,50 @@ class PoseCard extends React.PureComponent {
             ctx.moveTo(this.state.keypoints.ear.x, this.state.keypoints.ear.y);
             ctx.lineTo(this.state.keypoints.shoulder.x, this.state.keypoints.shoulder.y);
             ctx.lineTo(this.state.keypoints.elbow.x, this.state.keypoints.elbow.y);
+            ctx.stroke();
         }
     }
 
-    analyzePushOff(id) {
+    analyzePushOff(keypoints) {
+        let leftAnkle = keypoints[15].position;
+        let rightAnkle = keypoints[16].position;
 
+        let knee, hip, shoulder;
+
+        if (leftAnkle.y > rightAnkle.y) {
+            // left foot pushing off
+            knee = keypoints[13].position;
+            hip = keypoints[11].position;
+            shoulder = keypoints[5].position;
+        } else {
+            // right foot pushing off
+            knee = keypoints[14].position;
+            hip = keypoints[12].position;
+            shoulder = keypoints[6].position;
+        }
+
+        let torsoVector = {dx: hip.x - shoulder.x, dy: hip.y - shoulder.y};
+        let thighVector = {dx: hip.x - knee.x, dy: hip.y - knee.y};
+
+        // leg should be pushed back, ie. less in line with the back
+        let angleHip = this.calculateVectorAngle(torsoVector, thighVector);
+        console.log(angleHip);
+        if (angleHip > 2.9) {
+            this.setState({analysis: "pushoff", keypoints: {shoulder: shoulder, hip: hip, knee: knee}});
+        } else {
+            this.setState({analysis: "noissue", keypoints: {shoulder: shoulder, hip: hip, knee: knee}});
+        }
+    }
+
+    drawPush(id) {
+        let ctx = document.getElementById(id).getContext("2d");
+        ctx.strokeStyle = (this.state.analysis === "noissue") ? "#00FF00" : "#FF0000";
+
+        ctx.beginPath();
+        ctx.moveTo(this.state.keypoints.shoulder.x, this.state.keypoints.shoulder.y);
+        ctx.lineTo(this.state.keypoints.hip.x, this.state.keypoints.hip.y);
+        ctx.lineTo(this.state.keypoints.knee.x, this.state.keypoints.knee.y);
+        ctx.stroke();
     }
 
     calculateAnalysis(pose) {
@@ -219,9 +258,9 @@ class PoseCard extends React.PureComponent {
             this.analyzeIFF(keypoints);
         } else if (this.props.stage === "mid") {
             this.analyzeMid(keypoints);
-        } // else if (this.props.stage === "push") {
-        //     this.analyzePushOff(id);
-        // }
+        } else if (this.props.stage === "push") {
+            this.analyzePushOff(keypoints);
+        }
     }
 
     draw(id) {
@@ -229,9 +268,9 @@ class PoseCard extends React.PureComponent {
             this.drawIff(id);
         } else if (this.props.stage === "mid") {
             this.drawMid(id);
-        } // else if (this.props.stage === "push") {
-        //     this.analyzePushOff(id);
-        // }
+        } else if (this.props.stage === "push") {
+            this.drawPush(id);
+        }
     }
         
     componentDidMount() {
