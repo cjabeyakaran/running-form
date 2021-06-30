@@ -2,6 +2,7 @@ import React from 'react';
 import * as posenet from '@tensorflow-models/posenet';
 import {
     Card,
+    CardContent,
     CardMedia,
     withStyles
 } from '@material-ui/core';
@@ -25,7 +26,8 @@ class PoseCard extends React.PureComponent {
         this.state = {
             keypoints: [],
             analysis: ""
-        }
+        };
+        this.wrapper = React.createRef();
     }
 
     async calculatePose(imgId) {
@@ -235,7 +237,7 @@ class PoseCard extends React.PureComponent {
         let angleHip = this.calculateVectorAngle(torsoVector, thighVector);
         console.log(angleHip);
         if (angleHip > 2.9) {
-            this.setState({analysis: "pushoff", keypoints: {shoulder: shoulder, hip: hip, knee: knee}});
+            this.setState({analysis: "bounding", keypoints: {shoulder: shoulder, hip: hip, knee: knee}});
         } else {
             this.setState({analysis: "noissue", keypoints: {shoulder: shoulder, hip: hip, knee: knee}});
         }
@@ -280,8 +282,8 @@ class PoseCard extends React.PureComponent {
         if (this.props.upload) {
             this.calculatePose(imgId)
             .then((pose) => this.calculateAnalysis(pose))
-            .then(() => this.draw(canvasId))
-            .then(() => this.addImageToFirestore());
+            .then(() => this.draw(canvasId));
+            // .then(() => this.addImageToFirestore());
         } else {
             this.setState({
                 keypoints: this.props.keypoints, 
@@ -302,7 +304,9 @@ class PoseCard extends React.PureComponent {
                     {<img src={this.props.src} alt="" id={"still-" + this.props.id} className="still" height="400px" width="400px" />}
                     {<canvas id={"skel-" + this.props.id} className="skel" height="400px" width="400px"> </canvas>}
                 </CardMedia>
-                {/* {analysisComponent(this.state.analysis)} */}
+                <CardContent>
+                    {analysisComponent(this.state.analysis, this.wrapper)}
+                </CardContent>
             </Card>
         );
     }
