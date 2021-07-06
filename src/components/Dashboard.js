@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
-import { Button } from '@material-ui/core';
+import { 
+	AppBar, 
+	Toolbar,
+	Button,
+	Typography
+} from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../css/Dashboard.css';
-import CardCollection from './CardCollection';
+import CardCollection from './CardCollection'
 
 function Dashboard(props) {
 	const [error, setError] = useState("");
 	const { currentUser, logout } = useAuth();
 	const history = useHistory();
 
-	const handlelogout = () => {
+	const handlelogout = async () => {
 		try {
-			logout();
+			await logout();
 			history.push("/login");
 		} catch {
 			setError("Failed to log out");
@@ -22,10 +27,17 @@ function Dashboard(props) {
 
 	return (
 		<>
-			<div className="logout">
-				{error && <Alert severity="error"> {error} </Alert>}
-				<Button onClick={handlelogout}> Log Out </Button>
-			</div>
+			<AppBar position="static">
+				<Toolbar>
+				<Typography variant="h6">
+					{currentUser.displayName}
+				</Typography>
+				<div className="logout">
+					{error && <Alert severity="error"> {error} </Alert>}
+					<Button onClick={handlelogout}> Log Out </Button>
+				</div>
+				</Toolbar>
+			</AppBar>
 			<CardCollection user={currentUser.uid}/>
 		</>
 	);

@@ -8,43 +8,69 @@ import {
     Button, 
     Link
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { Alert } from '@material-ui/lab';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext'
+
+// used material-ui sign in template
+const useStyles = makeStyles((theme) => ({
+    root: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        marginTop: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main
+    },
+    form: {
+        width: '100%',
+        marginTop: theme.spacing(1)
+    },
+    button: {
+        marginTop: theme.spacing(1)
+    },
+    link: {
+        marginTop: theme.spacing(0.5)
+    }
+}));
 
 function SignUp() {
     const { signup } = useAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const history = useHistory();
+    const classes = useStyles();
 
-    function handleSubmit(e) {
-        const { email, password } = e.currentTarget.elements;
+    async function handleSubmit(e) {
+        const { email, password, firstName, lastName } = e.currentTarget.elements;
         e.preventDefault();
-
+        
         try {
             setError('');
             setLoading(true);
-            signup(email.value, password.value);
+            await signup(email.value, password.value, firstName.value, lastName.value);
             history.push("/");
         } catch {
-            setError('Failed to create an account')
+            setError('Failed to create an account');
         }
         setLoading(false);
     }
 
     return(
         <>
-            <Container component="main" maxWidth="xs">
-                <Avatar>
+            <Container component="main" maxWidth="xs" className={classes.root}>
+                <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign Up
                 </Typography>
                 {error && <Alert severity="error"> {error} </Alert>}
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className={classes.form}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -99,6 +125,7 @@ function SignUp() {
                         fullWidth
                         variant="contained"
                         color="primary"
+                        className={classes.button}
                     > Sign Up</Button>
 
                     <Grid container justify="flex-end">

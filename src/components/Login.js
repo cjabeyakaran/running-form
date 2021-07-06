@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         marginTop: theme.spacing(1)
+    }, 
+    link: {
+        marginTop: theme.spacing(0.5)
     }
 }));
 
@@ -42,17 +45,17 @@ function Login() {
     const history = useHistory();
     const classes = useStyles();
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         const { email, password } = e.currentTarget.elements;
         e.preventDefault();
 
         try {
             setError('');
             setLoading(true);
-            login(email.value, password.value);
+            await login(email.value, password.value);
             history.push("/");
         } catch {
-            setError('Failed to create an account')
+            setError('Failed to login user')
         }
         setLoading(false);
     }
