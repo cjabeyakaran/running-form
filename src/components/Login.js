@@ -5,19 +5,42 @@ import {
     Typography,
     Grid,
     TextField,
-    Button, 
+    Button,
     Link
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { Alert } from '@material-ui/lab';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext'
+
+// used material-ui sign in template
+const useStyles = makeStyles((theme) => ({
+    root: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        marginTop: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main
+    },
+    form: {
+        width: '100%',
+        marginTop: theme.spacing(1)
+    },
+    button: {
+        marginTop: theme.spacing(1)
+    }
+}));
 
 function Login() {
     const { login } = useAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const history = useHistory();
+    const classes = useStyles();
 
     function handleSubmit(e) {
         const { email, password } = e.currentTarget.elements;
@@ -34,17 +57,17 @@ function Login() {
         setLoading(false);
     }
 
-    return(
+    return (
         <>
-            <Container component="main" maxWidth="xs">
-                <Avatar>
+            <Container component="main" maxWidth="xs" className={classes.root}>
+                <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Log In
                 </Typography>
                 {error && <Alert severity="error"> {error} </Alert>}
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className={classes.form}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
@@ -76,6 +99,7 @@ function Login() {
                         fullWidth
                         variant="contained"
                         color="primary"
+                        className={classes.button}
                     > Log In</Button>
 
                     <Grid container justify="flex-end">
@@ -84,7 +108,7 @@ function Login() {
                                 Don't have an account yet? Sign up
                             </Link>
                         </Grid>
-                    </Grid>    
+                    </Grid>
                 </form>
             </Container>
         </>
