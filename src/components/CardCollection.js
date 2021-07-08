@@ -14,12 +14,22 @@ import { makeStyles } from '@material-ui/core/styles';
 import { db } from '../firebase';
 import PoseCard from './PoseCard'
 
+const useStyles = makeStyles((theme) => ({
+    div: {
+        padding: theme.spacing(4)
+    },
+    cardSection: {
+        marginTop: theme.spacing(2)
+    }
+}));
+
 function CardCollection(props) {
-    const [cards, setCards] = useState([[], [], []]); // first is IFF, second, is 
+    const [cards, setCards] = useState([[], [], []]); // first is IFF, second is midstance, and third is push off
     const [src, setSrc] = useState("");
     const [stage, setStage] = useState("");
     const [error, setError] = useState("");
-    const [ifError, setIfError] = useState(false);    
+    const [ifError, setIfError] = useState(false);   
+    const classes = useStyles();
 
     const handleImage = (e) => {
 		e.preventDefault();
@@ -71,7 +81,7 @@ function CardCollection(props) {
         .get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                let cardComp = <Grid item >
+                let cardComp = <Grid item alignItems="center" justifyContent="flex-start">
                     <PoseCard
                         key={doc.id} 
                         id={doc.id} 
@@ -98,8 +108,8 @@ function CardCollection(props) {
 
     return(
         <>
-            <div className="upload">
-            <Typography variant="h5" component="h2"> Image Upload </Typography>
+            <div className={classes.div}>
+                <Typography variant="h5" component="h2"> Image Upload </Typography>
                 <form onSubmit={handleSubmit}>
                     <input type="file" id="img-upload" accept="image/*" crossOrigin='anonymous' onChange={handleImage} /> 
                     <FormControl component="fieldset" error={ifError}>
@@ -114,21 +124,23 @@ function CardCollection(props) {
                     </FormControl>
                 </form>
             </div>
-            <Typography variant="h5" component="h2"> Analyzed Images </Typography>
-            <Grid container direction="row" spacing={2} justifyContent="center">
-                <Grid item container xs direction="column" spacing={2} alignItems="center">
-                    <Typography variant="h6" component="h3"> Initial Flat Foot </Typography>
-                    {cards[0]}
+            <div className={classes.div}>
+                <Typography variant="h5" component="h2"> Analyzed Images </Typography>
+                <Grid container direction="row" spacing={2} justifyContent="center" className={classes.cardSection}>
+                    <Grid item container xs direction="column" spacing={2} alignItems="center">
+                        <Typography variant="h6" component="h3"> Initial Flat Foot </Typography>
+                        {cards[0]}
+                    </Grid>
+                    <Grid item container xs direction="column" spacing={2} alignItems="center">
+                        <Typography variant="h6" component="h3"> Midstance </Typography>
+                        {cards[1]}
+                    </Grid>
+                    <Grid item container xs direction="column" spacing={2} alignItems="center">
+                        <Typography variant="h6" component="h3"> Push Off </Typography>
+                        {cards[2]}
+                    </Grid>
                 </Grid>
-                <Grid item container xs direction="column" spacing={2} alignItems="center">
-                    <Typography variant="h6" component="h3"> Midstance </Typography>
-                    {cards[1]}
-                </Grid>
-                <Grid item container xs direction="column" spacing={2} alignItems="center">
-                    <Typography variant="h6" component="h3"> Push Off </Typography>
-                    {cards[2]}
-                </Grid>
-            </Grid>
+            </div>
         </>
     );
 }
