@@ -12,7 +12,7 @@ import '../css/PoseCard.css'
 
 const styles = {
     root: {
-        maxWidth: 400
+        width: 400
     },
     media: {
         height: 400,

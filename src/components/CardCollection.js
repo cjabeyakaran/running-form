@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {
-    Container, 
+    Grid, 
     Button,
+    Typography,
     FormControl, 
     FormLabel,
     FormControlLabel,
@@ -9,11 +10,12 @@ import {
     RadioGroup,
     Radio 
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { db } from '../firebase';
 import PoseCard from './PoseCard'
 
 function CardCollection(props) {
-    const [cards, setCards] = useState([]);
+    const [cards, setCards] = useState([[], [], []]); // first is IFF, second, is 
     const [src, setSrc] = useState("");
     const [stage, setStage] = useState("");
     const [error, setError] = useState("");
@@ -44,14 +46,24 @@ function CardCollection(props) {
             setError("Must upload picture and select type of frame");
         }
         const id = Math.random().toString(36).substr(2, 9);
-        setCards([...cards, <PoseCard 
-            key={id} 
-            id={id} 
-            src={src} 
-            stage={stage} 
-            upload={true} 
-            user={props.user} 
-        />]);
+
+        let cardComp = <Grid item alignItems="center" justifyContent="flex-start">
+            <PoseCard 
+                key={id} 
+                id={id} 
+                src={src} 
+                stage={stage} 
+                upload={true} 
+                user={props.user} 
+            />
+        </Grid>;
+        if (stage === "iff") {
+            setCards([[cardComp, ...cards[0]], cards[1], cards[2]]);
+        } else if (stage === "mid") {
+            setCards([cards[0], [cardComp, ...cards[1]], cards[2]]);
+        } else if (stage === "push") {
+            setCards([cards[0], cards[1], [cardComp, ...cards[2]]]);
+        }
     };
 
     const getDataFromFirestore = () => {
@@ -59,14 +71,23 @@ function CardCollection(props) {
         .get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                setCards([...cards, <PoseCard 
-                    key={doc.id} 
-                    id={doc.id} 
-                    src={doc.data().src} 
-                    upload={false} 
-                    keypoints={doc.data().keypoints} 
-                    analysis={doc.data().analysis} 
-                />]);
+                let cardComp = <Grid item >
+                    <PoseCard
+                        key={doc.id} 
+                        id={doc.id} 
+                        src={doc.data().src} 
+                        upload={false} 
+                        keypoints={doc.data().keypoints} 
+                        analysis={doc.data().analysis} 
+                    />
+                </Grid>;
+                if (stage === "iff") {
+                    setCards([[cardComp, ...cards[0]], cards[1], cards[2]]);
+                } else if (stage === "mid") {
+                    setCards([cards[0], [cardComp, ...cards[1]], cards[2]]);
+                } else if (stage === "push") {
+                    setCards([cards[0], cards[1], [cardComp, ...cards[2]]]);
+                }
             });
         });
     };
@@ -78,6 +99,7 @@ function CardCollection(props) {
     return(
         <>
             <div className="upload">
+            <Typography variant="h5" component="h2"> Image Upload </Typography>
                 <form onSubmit={handleSubmit}>
                     <input type="file" id="img-upload" accept="image/*" crossOrigin='anonymous' onChange={handleImage} /> 
                     <FormControl component="fieldset" error={ifError}>
@@ -92,10 +114,21 @@ function CardCollection(props) {
                     </FormControl>
                 </form>
             </div>
-            <Container>
-                {cards}
-            </Container>
-
+            <Typography variant="h5" component="h2"> Analyzed Images </Typography>
+            <Grid container direction="row" spacing={2} justifyContent="center">
+                <Grid item container xs direction="column" spacing={2} alignItems="center">
+                    <Typography variant="h6" component="h3"> Initial Flat Foot </Typography>
+                    {cards[0]}
+                </Grid>
+                <Grid item container xs direction="column" spacing={2} alignItems="center">
+                    <Typography variant="h6" component="h3"> Midstance </Typography>
+                    {cards[1]}
+                </Grid>
+                <Grid item container xs direction="column" spacing={2} alignItems="center">
+                    <Typography variant="h6" component="h3"> Push Off </Typography>
+                    {cards[2]}
+                </Grid>
+            </Grid>
         </>
     );
 }
