@@ -9,6 +9,10 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
+const useStyles = makeStyles((theme) => ({
+	accordion: {}
+}));
+
 function NoFormIssueComponent() {
 	return (
 		<Typography gutterBottom variant="h5" component="h2"> Good Form! </Typography>
@@ -16,6 +20,7 @@ function NoFormIssueComponent() {
 }
 
 function OverstridingComponent(props) {
+	const classes = useStyles();
 	return (
 		<>
 			<Typography gutterBottom variant="h5" component="h2"> Warning: Overstriding </Typography>
@@ -84,7 +89,7 @@ function LimpPostureComponent(props) {
 			<Container>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> Concern </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> Concern </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<Typography paragraph>
@@ -94,7 +99,7 @@ function LimpPostureComponent(props) {
 				</Accordion>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> What to Look For in Stills </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> What to Look For in Stills </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<ul>
@@ -105,7 +110,7 @@ function LimpPostureComponent(props) {
 				</Accordion>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> Signs When Running </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> Signs When Running </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<ul>
@@ -116,7 +121,7 @@ function LimpPostureComponent(props) {
 				</Accordion>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> Fixes </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> Fixes </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<ul>
@@ -139,7 +144,7 @@ function LockedPostureComponent(props) {
 			<Container>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> Concern </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> Concern </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<Typography paragraph>
@@ -149,7 +154,7 @@ function LockedPostureComponent(props) {
 				</Accordion>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> What to Look For in Stills </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> What to Look For in Stills </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<ul>
@@ -159,7 +164,7 @@ function LockedPostureComponent(props) {
 				</Accordion>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> Signs When Running </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> Signs When Running </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<ul>
@@ -170,7 +175,7 @@ function LockedPostureComponent(props) {
 				</Accordion>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> Fixes </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> Fixes </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<ul>
@@ -193,7 +198,7 @@ function BoundingComponent(props) {
 			<Container>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> Concern </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> Concern </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<Typography paragraph>
@@ -203,7 +208,7 @@ function BoundingComponent(props) {
 				</Accordion>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> What to Look For in Stills </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> What to Look For in Stills </Typography>
 					</AccordionSummary>≈
 					<AccordionDetails>
 						<ul>
@@ -213,7 +218,7 @@ function BoundingComponent(props) {
 				</Accordion>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> Signs When Running </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> Signs When Running </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<ul>
@@ -226,7 +231,7 @@ function BoundingComponent(props) {
 				</Accordion>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> Fixes </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> Fixes </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<ul>
