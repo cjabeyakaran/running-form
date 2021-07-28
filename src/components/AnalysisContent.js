@@ -31,7 +31,7 @@ function OverstridingComponent(props) {
 			<Container>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> Concern </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> Concern </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<Typography paragraph>
@@ -41,7 +41,7 @@ function OverstridingComponent(props) {
 				</Accordion>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> What to Look For in Stills</Typography>
+						<Typography gutterBottom variant="h6" component="h3"> What to Look For in Stills</Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<ul>
@@ -53,7 +53,7 @@ function OverstridingComponent(props) {
 				</Accordion>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> Signs When Running </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> Signs When Running </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<ul>
@@ -65,7 +65,7 @@ function OverstridingComponent(props) {
 				</Accordion>
 				<Accordion ref={props.transitionRef}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
-						<Typography gutterBottom variant="h5" component="h3"> Fixes </Typography>
+						<Typography gutterBottom variant="h6" component="h3"> Fixes </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<ul>
