@@ -75,9 +75,8 @@ function CardCollection(props) {
         }
         const id = Math.random().toString(36).substr(2, 9);
 
-        let cardComp = <Grid item alignItems="center" justifyContent="flex-start">
+        let cardComp = <Grid item key={id} alignItems="center" justifyContent="flex-start">
             <PoseCard 
-                key={id} 
                 id={id} 
                 src={src} 
                 stage={stage} 
@@ -99,9 +98,8 @@ function CardCollection(props) {
         .get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                let cardComp = <Grid item alignItems="center" justifyContent="flex-start">
+                let cardComp = <Grid item key={doc.id} alignItems="center" justifyContent="flex-start">
                     <PoseCard
-                        key={doc.id} 
                         id={doc.id} 
                         src={doc.data().src} 
                         upload={false} 
