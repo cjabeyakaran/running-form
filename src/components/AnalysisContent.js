@@ -10,12 +10,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 const useStyles = makeStyles((theme) => ({
-	accordion: {}
+	accordion: {
+		width: "100%"
+	}
 }));
 
 function NoFormIssueComponent() {
 	return (
-		<Typography gutterBottom variant="h5" component="h2"> Good Form! </Typography>
+		<Typography gutterBottom variant="subtitle1" component="h2"> Good Form! </Typography>
 	);
 }
 
@@ -23,23 +25,23 @@ function OverstridingComponent(props) {
 	const classes = useStyles();
 	return (
 		<>
-			<Typography gutterBottom variant="h5" component="h2"> Warning: Overstriding </Typography>
+			<Typography gutterBottom variant="subtitle1" component="h2"> Warning: Overstriding </Typography>
 			<Typography variant="body2" color="textSecondary" component="p">
 				Overstriding occurs when the landing foot lands significantly in front of the center of mass (under the hips).
 				Think of it as a braking motion as you run. Click below to read more for signs and how to fix overstriding.
 			</Typography>
 			<Container>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> Concern </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
-						<Typography paragraph>
+						<Typography variant="body2" color="textSecondary" component="p">
 							Increased impact goes through legs, especially shins and knees. Often times leads to shin splints and knee pain.
 						</Typography>
 					</AccordionDetails>
 				</Accordion>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> What to Look For in Stills</Typography>
 					</AccordionSummary>
@@ -51,7 +53,7 @@ function OverstridingComponent(props) {
 						</ul>
 					</AccordionDetails>
 				</Accordion>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> Signs When Running </Typography>
 					</AccordionSummary>
@@ -63,7 +65,7 @@ function OverstridingComponent(props) {
 						</ul>
 					</AccordionDetails>
 				</Accordion>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> Fixes </Typography>
 					</AccordionSummary>
@@ -80,24 +82,25 @@ function OverstridingComponent(props) {
 }
 
 function LimpPostureComponent(props) {
+	const classes = useStyles();
 	return (
 		<>
-			<Typography gutterBottom variant="h5" component="h2"> Warning: Limp Posture </Typography>
+			<Typography gutterBottom variant="subtitle1" component="h2"> Warning: Limp Posture </Typography>
 			<Typography variant="body2" color="textSecondary" component="p">
 				Limp posture occurs when one leads forwards too far. Click below to read more for signs and how to fix limp posture.
 			</Typography>
 			<Container>
-				<Accordion ref={props.transitionRef}>
+			<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> Concern </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
-						<Typography paragraph>
+						<Typography variant="body2" color="textSecondary" component="p">
 							Back pain, either near the neck and upper back.
 						</Typography>
 					</AccordionDetails>
 				</Accordion>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> What to Look For in Stills </Typography>
 					</AccordionSummary>
@@ -108,7 +111,7 @@ function LimpPostureComponent(props) {
 						</ul>
 					</AccordionDetails>
 				</Accordion>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> Signs When Running </Typography>
 					</AccordionSummary>
@@ -119,7 +122,7 @@ function LimpPostureComponent(props) {
 						</ul>
 					</AccordionDetails>
 				</Accordion>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> Fixes </Typography>
 					</AccordionSummary>
@@ -135,24 +138,25 @@ function LimpPostureComponent(props) {
 }
 
 function LockedPostureComponent(props) {
+	const classes = useStyles();
 	return (
 		<>
-			<Typography gutterBottom variant="h5" component="h2"> Warning: Limp Posture </Typography>
+			<Typography gutterBottom variant="subtitle1" component="h2"> Warning: Limp Posture </Typography>
 			<Typography variant="body2" color="textSecondary" component="p">
 				Limp posture occurs when one leads backwards and is too upright while running. Click below to read more for signs and how to fix locked posture.
 			</Typography>
 			<Container>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> Concern </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
-						<Typography paragraph>
+						<Typography variant="body2" color="textSecondary" component="p">
 							Back pain, especially near the lower back.
 						</Typography>
 					</AccordionDetails>
 				</Accordion>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> What to Look For in Stills </Typography>
 					</AccordionSummary>
@@ -162,7 +166,7 @@ function LockedPostureComponent(props) {
 						</ul>
 					</AccordionDetails>
 				</Accordion>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> Signs When Running </Typography>
 					</AccordionSummary>
@@ -173,7 +177,7 @@ function LockedPostureComponent(props) {
 						</ul>
 					</AccordionDetails>
 				</Accordion>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> Fixes </Typography>
 					</AccordionSummary>
@@ -189,24 +193,25 @@ function LockedPostureComponent(props) {
 }
 
 function BoundingComponent(props) {
+	const classes = useStyles();
 	return (
 		<>
-			<Typography gutterBottom variant="h5" component="h2"> Warning: Bounding </Typography>
+			<Typography gutterBottom variant="subtitle1" component="h2"> Warning: Bounding </Typography>
 			<Typography variant="body2" color="textSecondary" component="p">
 				Bounding occurs when there is significant vertical movement than necessary to move forwards. Click below to read more for signs and how to fix bounding.
 			</Typography>
 			<Container>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> Concern </Typography>
 					</AccordionSummary>
 					<AccordionDetails>
-						<Typography paragraph>
+						<Typography variant="body2" color="textSecondary" component="p">
 							Although it doesn't necessarily cause any injuries on its own, it worsens the effects of other running faults.
 						</Typography>
 					</AccordionDetails>
 				</Accordion>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> What to Look For in Stills </Typography>
 					</AccordionSummary>≈
@@ -216,7 +221,7 @@ function BoundingComponent(props) {
 						</ul>
 					</AccordionDetails>
 				</Accordion>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> Signs When Running </Typography>
 					</AccordionSummary>
@@ -229,7 +234,7 @@ function BoundingComponent(props) {
 						</ul>
 					</AccordionDetails>
 				</Accordion>
-				<Accordion ref={props.transitionRef}>
+				<Accordion ref={props.transitionRef} className={classes.accordion}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />} >
 						<Typography gutterBottom variant="h6" component="h3"> Fixes </Typography>
 					</AccordionSummary>
