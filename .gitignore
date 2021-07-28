@@ -21,3 +21,28 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# images 
+
+# JPEG
+*.jpg
+*.jpeg
+
+# Graphics Interchange Format
+*.gif
+
+# Portable Network Graphics
+*.png
+
+# Scalable Vector Graphics
+*.svg
+
+# Portable Document Format
+*.pdf
+
+# BMP
+*.bmp
+
+# ICO
+*.ico
+*.max
